@@ -22,8 +22,9 @@ connection.connect(function(err) {
     userPrompt();
   });
 
+//Home screen where user selects item from the menu
   function userPrompt() {
-    // console.log('___ENTER promptUserPurchase___');
+
   
     // Prompt the user to select an item
     inquirer.prompt([
@@ -40,14 +41,16 @@ connection.connect(function(err) {
         filter: Number
       }
     ]).then(function(input) {
-      console.log('Customer has selected: \n    item_id = '  + input.item_id + '\n    quantity = ' + input.stock_quantity);
+      console.log('Customer has selected: \n    Item ID = '  + input.item_id + '\n    Quantity = ' + input.stock_quantity + "g(s)");
   
       var itemNeeded = input.item_id;
       var quantityNeeded = input.stock_quantity;
       checkout(itemNeeded, quantityNeeded);
     });
 } 
-    
+  
+
+//Displays the screen after the user enters the product they would like to purchase
 function checkout (itemNeeded, quantityNeeded){
       var query = "SELECT * FROM products WHERE ?";
       connection.query(query, { item_id: itemNeeded }, function(err, res) {
@@ -55,12 +58,11 @@ function checkout (itemNeeded, quantityNeeded){
         if(quantityNeeded <= res[0].stock_quantity){
           var totalCost = res[0].price * quantityNeeded;
           console.log("Good news your order is in stock!");
-          console.log("Your total cost for " + quantityNeeded + " " +res[0].product_name + " is " + totalCost + " Thank you!");
+          console.log("The total for " + quantityNeeded + "g(s) of " + res[0].product_name + " comes to " + totalCost + ". Thank you!");
           connection.query("UPDATE products SET stock_quantity = stock_quantity - " + quantityNeeded + "WHERE item_id = " + itemNeeded);
         } else{
-          console.log("Insufficient quantity, sorry we do not have enough " + res[0].product_name + "to complete your order.");
+          console.log("Insufficient quantity! Sorry, we are totally out of " + res[0].product_name + ".");
         };
         userPrompt();
       })
 }
-  
