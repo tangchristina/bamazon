@@ -58,7 +58,7 @@ function checkout (itemNeeded, quantityNeeded){
           console.log("Your total cost for " + quantityNeeded + " " +res[0].product_name + " is " + totalCost + " Thank you!");
           connection.query("UPDATE products SET stock_quantity = stock_quantity - " + quantityNeeded + "WHERE item_id = " + itemNeeded);
         } else{
-          console.log("Insufficient quantity, sorry we do not have enough " + res[0].product_name + " to complete your order.");
+          console.log("Insufficient quantity, sorry we do not have enough " + res[0].product_name + "to complete your order.");
         };
         userPrompt();
       })
