@@ -1,5 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var Table = require("cli-table");
+
 
 // create the connection information for the sql database
 var connection = mysql.createConnection({
@@ -19,8 +21,27 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId + "\n");
-    userPrompt();
+
   });
+  
+//Visually displaying the MySQL table for the user on the command line 
+  var displayMenu = function(){
+    var query = "Select * FROM products";
+    connection.query(query, function(err, res){
+      if(err) throw err;
+      var displayTable = new Table ({
+        head: ["Item ID", "Product Name", "Catergory", "Price", "Quantity"],
+        colWidths: [10,25,15,10,12]
+      });
+      for(var i = 0; i < res.length; i++){
+        displayTable.push(
+          [res[i].item_id,res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]
+          );
+      }
+      console.log(displayTable.toString());
+      userPrompt();
+    });
+  }
 
 //Home screen where user selects item from the menu
   function userPrompt() {
@@ -59,10 +80,15 @@ function checkout (itemNeeded, quantityNeeded){
           var totalCost = res[0].price * quantityNeeded;
           console.log("Good news your order is in stock!");
           console.log("The total for " + quantityNeeded + "g(s) of " + res[0].product_name + " comes to " + totalCost + ". Thank you!");
-          connection.query("UPDATE products SET stock_quantity = stock_quantity - " + quantityNeeded + "WHERE item_id = " + itemNeeded);
+          connection.query("UPDATE products SET stock_quantity = stock_quantity - quantityNeeded + WHERE item_id = itemNeeded");
         } else{
           console.log("Insufficient quantity! Sorry, we are totally out of " + res[0].product_name + ".");
-        };
-        userPrompt();
-      })
-}
+        }
+      });
+    displayMenu();
+};
+displayMenu();
+
+
+
+
