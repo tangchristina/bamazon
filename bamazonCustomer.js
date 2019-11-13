@@ -78,11 +78,11 @@ function checkout (itemNeeded, quantityNeeded){
         if (err) throw err;
         if(quantityNeeded <= res[0].stock_quantity){
           var totalCost = res[0].price * quantityNeeded;
+          connection.query('UPDATE products SET stock_quantity = ' + (res[0].stock_quantity - quantityNeeded) + ' WHERE item_id = ' + itemNeeded);
           console.log("Good news your order is in stock!");
           console.log("The total for " + quantityNeeded + "g(s) of " + res[0].product_name + " comes to " + totalCost + ". Thank you!");
-          connection.query('UPDATE products SET stock_quantity = ' + (res[0].stock_quantity - quantityNeeded) + ' WHERE item_id = ' + itemNeeded);
         } else{
-          console.log("Insufficient quantity! Sorry, we are totally out of " + res[0].product_name + ".");
+          console.log("Insufficient quantity! Sorry, we don't have enough " + res[0].product_name + ".");
         }
       });
     displayMenu();

@@ -13,3 +13,8 @@ npm install inquire
 npm install cli-table
 
 npm install mysql
+
+# SCREENSHOTS
+![screenshot1](bamazon1.png)
+![screenshot2](bamazon2.png)
+![screenshot2](bamazon2.png)
