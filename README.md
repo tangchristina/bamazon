@@ -18,4 +18,4 @@ npm install mysql
 ![screenshot1](bamazon1.png)
 ![screenshot2](bamazon2.png)
 ![screenshot3](bamazon3.png)
-![screenshot4] (bamazon4.png)
+![screenshot4](bamazon4.png)
